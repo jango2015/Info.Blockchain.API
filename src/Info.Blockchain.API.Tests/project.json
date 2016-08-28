@@ -1,0 +1,21 @@
+﻿{
+  "version": "1.0.0-*",
+  "testRunner": "xunit",
+  "dependencies": {
+    "Info.Blockchain.API": "1.0.0-*",
+    "xunit": "2.2.0-beta2-build3300",
+    "dotnet-test-xunit": "2.2.0-*"
+  },
+
+  "frameworks": {
+    "netcoreapp1.0": {
+      "dependencies": {
+        "Microsoft.NETCore.App": {
+          "version": "1.0.0-*",
+          "type": "platform"
+        },
+        "System.Diagnostics.TraceSource": "4.0.0-*"
+      }
+    }
+  }
+}
