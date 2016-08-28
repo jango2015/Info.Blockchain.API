@@ -1,8 +1,8 @@
 ﻿using System;
 using System.Collections.ObjectModel;
 using Info.Blockchain.API.BlockExplorer;
-using KellermanSoftware.CompareNetObjects;
 using Xunit;
+using Shouldly;
 
 namespace Info.Blockchain.API.Tests.IntegrationTests
 {
@@ -34,9 +34,7 @@ namespace Info.Blockchain.API.Tests.IntegrationTests
 				ReadOnlyCollection<Block> knownBlocks = ReflectionUtil.DeserializeFile("blocks_height_" + height, Block.DeserializeMultiple);
 				ReadOnlyCollection<Block> receivedBlocks = await apiHelper.BlockExpolorer.GetBlocksAtHeightAsync(height);
 
-				ComparisonResult comparisonResult = new CompareLogic().Compare(knownBlocks, receivedBlocks);
-				bool areEqual = comparisonResult.AreEqual;
-				Assert.True(areEqual);
+                knownBlocks.ShouldBe(receivedBlocks);
 			}
 		}
 
@@ -49,10 +47,8 @@ namespace Info.Blockchain.API.Tests.IntegrationTests
 				ReadOnlyCollection<SimpleBlock> knownBlocks = ReflectionUtil.DeserializeFile("blocks_timestamp_" + 1293623863000, SimpleBlock.DeserializeMultiple);
 				ReadOnlyCollection<SimpleBlock> receivedBlocks = await apiHelper.BlockExpolorer.GetBlocksAsync(unixMillis);
 
-				ComparisonResult comparisonResult = new CompareLogic().Compare(knownBlocks, receivedBlocks);
-				bool areEqual = comparisonResult.AreEqual;
-				Assert.True(areEqual);
-			}
+                knownBlocks.ShouldBe(receivedBlocks);
+            }
 		}
 
 		[Fact]
@@ -65,10 +61,8 @@ namespace Info.Blockchain.API.Tests.IntegrationTests
 				ReadOnlyCollection<SimpleBlock> knownBlocks = ReflectionUtil.DeserializeFile("blocks_timestamp_" + 1293623863000, SimpleBlock.DeserializeMultiple);
 				ReadOnlyCollection<SimpleBlock> receivedBlocks = await apiHelper.BlockExpolorer.GetBlocksAsync(dateTime);
 
-				ComparisonResult comparisonResult = new CompareLogic().Compare(knownBlocks, receivedBlocks);
-				bool areEqual = comparisonResult.AreEqual;
-				Assert.True(areEqual);
-			}
+                knownBlocks.ShouldBe(receivedBlocks);
+            }
 		}
 
 		[Fact]
@@ -78,9 +72,10 @@ namespace Info.Blockchain.API.Tests.IntegrationTests
 			{
 				const string poolName = "AntPool";
 				ReadOnlyCollection<SimpleBlock> receivedBlocks = await apiHelper.BlockExpolorer.GetBlocksAsync(poolName);
-				
-				Assert.NotNull(receivedBlocks);
-			}
+
+                receivedBlocks.ShouldNotBeNull();
+
+            }
 		}
 	}
 }

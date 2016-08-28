@@ -1,7 +1,7 @@
 ﻿using System.Collections.ObjectModel;
 using Info.Blockchain.API.BlockExplorer;
-using KellermanSoftware.CompareNetObjects;
 using Xunit;
+using Shouldly;
 
 namespace Info.Blockchain.API.Tests.IntegrationTests
 {
@@ -15,10 +15,9 @@ namespace Info.Blockchain.API.Tests.IntegrationTests
 				Transaction knownTransaction = ReflectionUtil.DeserializeFile<Transaction>("single_transaction");
 				Transaction receivedTransaction = await apiHelper.BlockExpolorer.GetTransactionAsync(knownTransaction.Hash);
 
-				CompareLogic compareLogic = new CompareLogic();
-				ComparisonResult comparisonResult = compareLogic.Compare(knownTransaction, receivedTransaction);
-				Assert.True(comparisonResult.AreEqual);
-			}
+                knownTransaction.ShouldBe(receivedTransaction);
+
+            }
 		}
 
 		[Fact]
@@ -29,10 +28,8 @@ namespace Info.Blockchain.API.Tests.IntegrationTests
 				Transaction knownTransaction = ReflectionUtil.DeserializeFile<Transaction>("single_transaction");
 				Transaction receivedTransaction = await apiHelper.BlockExpolorer.GetTransactionByIndexAsync(knownTransaction.Index);
 
-				CompareLogic compareLogic = new CompareLogic();
-				ComparisonResult comparisonResult = compareLogic.Compare(knownTransaction, receivedTransaction);
-				Assert.True(comparisonResult.AreEqual);
-			}
+                knownTransaction.ShouldBe(receivedTransaction);
+            }
 		}
 
 		[Fact]
@@ -41,9 +38,10 @@ namespace Info.Blockchain.API.Tests.IntegrationTests
 			using (BlockchainApiHelper apiHelper = new BlockchainApiHelper())
 			{
 				ReadOnlyCollection<Transaction> unconfirmedTransactions = await apiHelper.BlockExpolorer.GetUnconfirmedTransactionsAsync();
-				
-				Assert.NotNull(unconfirmedTransactions);
-			}
+
+                unconfirmedTransactions.ShouldNotBeNull();
+
+            }
 		}
 	}
 }
